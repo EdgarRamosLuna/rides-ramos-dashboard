@@ -6,28 +6,37 @@ import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
 const Travels = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
-    fetch("/api/travels")
-      .then((response) => response.json())
-      .then((data) => {
-        const formattedRows = data[0].map(item => ({
-          ...item,
-          travel_date: formatDate(item.travel_date),
-          schedule_time: `${item.start_time} - ${item.end_time}`,
-          rate_amount: `$${item.rate_amount}`,
-          actions: <>
-            <button>Detalles</button>
-            <button>Borrar</button>
-          </>,
-        }));
-        setData(formattedRows)
-      });
+    setLoading(true);    
+    try {
+      
+      fetch("/api/travels")
+        .then((response) => response.json())
+        .then((data) => {
+          const formattedRows = data[0].map(item => ({
+            ...item,
+            travel_date: formatDate(item.travel_date),
+            schedule_time: `${item.start_time} - ${item.end_time}`,
+            rate_amount: `$${item.rate_amount}`,
+            actions: <>
+              <button>Detalles</button>
+              <button>Borrar</button>
+            </>,
+          }));
+          setData(formattedRows)
+          setLoading(false);          
+          
+        });
+    } catch (error) {
+      setLoading(false);
+    }
   }, []);
 
-  console.log(data[0])
+ 
   const columns = [
-    { field: 'id', headerName: 'ID Viaje', width: 90 },    
+    { field: 'id', headerName: '# Viaje', width: 90 },    
     { field: 'from_destination', headerName: 'Origen', width: 150 },
     { field: 'to_destination', headerName: 'Destino', width: 150 },
     //{ field: 'distance', headerName: 'Distance (km)', type: 'number', width: 130 },
@@ -93,6 +102,7 @@ const Travels = () => {
 
   
   return <div style={{ height: 400, width: '100%' }}>
+    <>
     <DataGrid
       rows={data}
       columns={columns}
@@ -102,8 +112,10 @@ const Travels = () => {
         },
       }}
       pageSizeOptions={[5, 10]}
-      checkboxSelection
+      loading={loading}
+     // checkboxSelection
     />
+    </>
   </div>;
 };
 
