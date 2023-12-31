@@ -1,19 +1,23 @@
 'use client'
 import { Button, Grid } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Modal from "../ui/Modal";
 import ScheduleForm from "./ScheduleForm";
+import MainContext from "@/context/MainContext";
+import toast from "react-hot-toast";
+import { useConfirm } from "material-ui-confirm";
 
 const SchedulesList = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(null);
-  const [open, setOpen] = useState(false)
   const [idSchedule, setIdSchedule] = useState(0);
-  const [scheduleToEdit, setScheduleToEdit] = useState(false);
-  useEffect(() => {
+
+  const { openSchedulesModal, setOpenSchedulesModal, scheduleToEdit, setScheduleToEdit } = useContext(MainContext);
+  const confirm = useConfirm();
+  const getData = () => {
     setLoading(true);
     try {
 
@@ -28,19 +32,15 @@ const SchedulesList = () => {
           setData(formattedRows)
           setLoading(false);
         });
+
     } catch (error) {
       setLoading(false);
     }
+  }
+  useEffect(() => {
+    getData()
   }, []);
 
-  const onClickEdit = (e) => {
-    setOpen(true)
-    //e.stopPropagation(); // don't select this row after clicking      
-    // Handle edit action
-  //  console.log(`Editing row with id: ${params.id}`);
-    setIdSchedule(1)
-    setScheduleToEdit(true)
-  };
   const columns = [
 
     {
@@ -57,14 +57,27 @@ const SchedulesList = () => {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
-       
+        const onClickEdit = (e) => {
+          setOpenSchedulesModal(true)
+          //e.stopPropagation(); // don't select this row after clicking      
+          // Handle edit action
+          console.log(`Editing row with id: ${params.id}`);
+          setIdSchedule(params.id)
+          setScheduleToEdit(true)
+        };
+        // const onClickDelete = (e) => {
+
+        //   // Handle delete action
+        //   //console.log(`Deleting row with id: ${params.id}`);
+        //   e.stopPropagation(); // don't select this row after clicking
 
 
+        // };
         const onClickDelete = (e) => {
           e.stopPropagation(); // don't select this row after clicking
-
-          // Handle delete action
-          console.log(`Deleting row with id: ${params.id}`);
+          confirm({ description: `This will permanently delete ${params.id}.` })
+            .then(() => deleteSchedule(params.id))
+            .catch(() => console.log("Deletion cancelled."));
         };
 
         return (
@@ -117,7 +130,24 @@ const SchedulesList = () => {
       }
 
       const data = await response.json();
-      console.log('Schedule added successfully:', data);
+
+      if (!data.result.error) {
+
+        const { typeResponse, statusMessage, lastInsertedId } = data.result[0][0];
+        if (typeResponse === 'error') {
+          toast.error(statusMessage)
+        } else {
+          setOpenSchedulesModal(false);
+          toast.success('Datos guardados!')
+          setData(prev => [...prev, {
+            "id": lastInsertedId,
+            "description": scheduleData.description,
+            "schedule_time": `${formatTime(scheduleData.startTime)} - ${formatTime(scheduleData.endTime)}`,
+          }])
+
+        }
+      }
+      //setData(prev => [...prev, {} ])
       // Procesar los datos de respuesta como sea necesario
     } catch (error) {
       console.error('Failed to add schedule:', error);
@@ -141,7 +171,57 @@ const SchedulesList = () => {
       }
 
       const data = await response.json();
+      
+      if (!data.result.error) {
+        const { typeResponse, statusMessage, lastInsertedId } = data.result[0][0];
+        if (typeResponse === 'error') {
+          toast.error(statusMessage)
+        } else {
+          toast.success('Datos actualizados!')
+          setOpenSchedulesModal(false);
+          setData(prev => prev.map(item =>
+            Number(item.id) === Number(idSchedule)
+              ? {
+                ...item,
+                description: scheduleData.description,
+                schedule_time: `${formatTime(scheduleData.startTime)} - ${formatTime(scheduleData.endTime)}`
+              }
+              : item
+          ));
+        }
+
+      }
+
+      // Procesar los datos de respuesta como sea necesario
+    } catch (error) {
+      console.error('Failed to update schedule:', error);
+      // Manejar errores aquí
+    }
+  }
+  // Función para actualizar un horario existente
+  async function deleteSchedule(idSchedule) {
+    try {
+      const response = await fetch(`/api/schedules/delete/${idSchedule}`, {
+        method: 'PUT', // o 'PATCH' si solo vas a actualizar parte del recurso
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setOpenSchedulesModal(false);
       console.log('Schedule updated successfully:', data);
+      toast.success('Datos eliminados!')
+      if (!data.result.error) {
+        setOpenSchedulesModal(false);
+        setData(prev => prev.filter(d => Number(d.id) !== Number(idSchedule)));
+
+      }
+
       // Procesar los datos de respuesta como sea necesario
     } catch (error) {
       console.error('Failed to update schedule:', error);
@@ -153,7 +233,7 @@ const SchedulesList = () => {
 
   return <div style={{ height: 400, width: '100%' }}>
     <>
-      <Modal open={open} setOpen={setOpen} title={scheduleToEdit ? 'Editar horario' : 'Crear horario'}>
+      <Modal open={openSchedulesModal} setOpen={setOpenSchedulesModal} title={scheduleToEdit ? 'Editar horario' : 'Crear horario'}>
         <ScheduleForm
           addSchedule={addSchedule}
           editSchedule={editSchedule}

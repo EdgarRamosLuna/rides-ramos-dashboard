@@ -59,7 +59,7 @@ const ScheduleForm = ({ addSchedule, editSchedule, scheduleToEdit, idSchedule })
   };
   
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
       <Grid
         sx={{
           display: 'flex',

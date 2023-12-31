@@ -10,26 +10,33 @@ import AirportShuttleIcon from '@mui/icons-material/AirportShuttle';
 import GroupIcon from '@mui/icons-material/Group';
 import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import { Button } from "@mui/material";
+import MainContext from "@/context/MainContext";
+import { useContext } from "react";
 export function Dashboard({ children }) {
   let pathname = usePathname();
   pathname = pathname.replaceAll('/', "");
+  const {setOpenSchedulesModal} = useContext(MainContext)
   return (
     (<div className="flex flex-col h-screen w-full">
-      {/* <header
+      <header
         className="flex h-14 items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
-        <div className="w-full flex-1">
+        {/* <div className="w-full flex-1">
           <form>
             <div className="relative">
-              <SearchIcon
+                <Button></Button>
+              {/* <SearchIcon
                 className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
               <Input
                 className="w-full bg-white shadow-none appearance-none pl-8 dark:bg-gray-950"
                 placeholder="Search information..."
-                type="search" />
+                type="search" /> 
             </div>
           </form>
-        </div>
-      </header> */}
+        </div> */}
+        {pathname === 'schedules' && <Button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={() => setOpenSchedulesModal(true)}>Agregar nuevo horario</Button>}
+
+      </header>
       <div className="flex flex-grow">
         <aside className="w-64 border-r bg-gray-100/40 dark:bg-gray-800/40">
           <nav className="flex flex-col p-6">
@@ -86,7 +93,7 @@ export function Dashboard({ children }) {
         </aside>
         <main className="flex-1 p-6">
           <>
-          
+
             {children}
             {/* <CardHeader className="pb-4">
               <CardTitle>Information Card</CardTitle>
