@@ -8,7 +8,7 @@ export default function Home() {
       content: <Travels/>,
     },
     {
-      label: "Viajes totales",
+      label: "Viajes completados",
       content: <Travels/>,
     },
   ];
