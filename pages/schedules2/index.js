@@ -1,7 +1,6 @@
 // pages/schedules.js
 
-import { Dashboard } from "@/components/dashboard";
-import Drivers from "@/components/drivers/Drivers";
+
 import SchedulesList from "@/components/schedules/List";
 
 export async function getServerSideProps(context) {
@@ -17,9 +16,9 @@ export async function getServerSideProps(context) {
   export default function SchedulesPage({ schedules }) {
     // Usa los datos propios del servidor para renderizar el componente.
     return (
-      <Dashboard>
-        <SchedulesList response={schedules}/>
-      </Dashboard>
+      <>
+        test
+      </>
     );
   }
   

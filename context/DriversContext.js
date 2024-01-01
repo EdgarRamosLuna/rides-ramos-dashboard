@@ -3,10 +3,10 @@ import { ConfirmProvider } from "material-ui-confirm";
 import { createContext, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
-const MainContext = createContext();
+const Drivers = createContext();
 
 // Crear el proveedor del contexto
-export const MainContextProvider = ({ children }) => {
+export const DriversProvider = ({ children }) => {
   const [openSchedulesModal, setOpenSchedulesModal] = useState(false);
   const [scheduleToEdit, setScheduleToEdit] = useState(false);
   const [driverToEdit, setDriverToEdit] = useState(false);
@@ -45,7 +45,7 @@ export const MainContextProvider = ({ children }) => {
     setUnitToEdit
   };
   return (
-    <MainContext.Provider value={config}>
+    <Drivers.Provider value={config}>
       <Toaster
         position="top-center"
         reverseOrder={false}
@@ -60,8 +60,8 @@ export const MainContextProvider = ({ children }) => {
         }}
       />
       <ConfirmProvider>{children}</ConfirmProvider>
-    </MainContext.Provider>
+    </Drivers.Provider>
   );
 };
 
-export default MainContext;
+export default Drivers;

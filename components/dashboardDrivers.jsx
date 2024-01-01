@@ -9,7 +9,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import { usePathname } from "next/navigation";
 
 import HeaderButtons from "./ui/HeaderButtons";
-export function Dashboard({ children }) {
+export function DashboardDrivers({ children }) {
   let pathname = usePathname();    
   let partes = pathname.split('/'); // Esto divide la cadena en cada '/'
   pathname = partes[partes.length - 1]; // Selecciona el último elemento del arreglo
@@ -38,49 +38,18 @@ export function Dashboard({ children }) {
       <div className="flex flex-grow">
         <aside className="w-64 border-r bg-gray-100/40 dark:bg-gray-800/40">
           <nav className="flex flex-col p-6">
-            <Link
+            {/* <Link
               className={`mb-4 flex items-center gap-3 rounded-lg px-3 py-2  transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${pathname === '' ? 'text-gray-900' : 'text-gray-500'}`}
-              href="/dashboard">
+              href="/driver">
               <DashboardIcon className="h-4 w-4" />
               Dashboard
-            </Link>
-            {/* <Link
-              className={`mb-4 flex items-center gap-3 rounded-lg px-3 py-2  transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${pathname === 'travels' ? 'text-gray-900':'text-gray-500'}`}
-              href="/reports">
-              <FileIcon className="h-4 w-4" />
-              Reportes
-            </Link> */}
+            </Link>      */}
             <Link
               className={`mb-4 flex items-center gap-3 rounded-lg px-3 py-2  transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${pathname === 'travels' ? 'text-gray-900' : 'text-gray-500'}`}
-              href="/dashboard/travels">
+              href="/driver/travels">
               <MapIcon className="h-4 w-4" />
               Viajes
-            </Link>
-            <Link
-              className={`mb-4 flex items-center gap-3 rounded-lg px-3 py-2  transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${pathname === 'schedules' ? 'text-gray-900' : 'text-gray-500'}`}
-              href="/dashboard/schedules">
-              <CalendarMonthIcon className="h-4 w-4" />
-              Horarios
-            </Link>
-            <Link
-              className={`mb-4 flex items-center gap-3 rounded-lg px-3 py-2  transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${pathname === 'drivers' ? 'text-gray-900' : 'text-gray-500'}`}
-              href="/dashboard/drivers">
-              <DriversIcon className="h-4 w-4" />
-              Choferes
-            </Link>
-            <Link
-              className={`mb-4 flex items-center gap-3 rounded-lg px-3 py-2  transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${pathname === 'units' ? 'text-gray-900' : 'text-gray-500'}`}
-              href="/dashboard/units">
-              <AirportShuttleIcon className="h-4 w-4" />
-              Unidades
-            </Link>
-            <Link
-              className={`mb-4 flex items-center gap-3 rounded-lg px-3 py-2  transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 ${pathname === 'users' ? 'text-gray-900' : 'text-gray-500'}`}
-              href="/users">
-              <GroupIcon className="h-4 w-4" />
-              Usuarios
-            </Link>
-
+            </Link>                        
             <Link
               className={`mb-4 flex items-center gap-3 rounded-lg px-3 py-2  transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 text-gray-500`}
               href="#">

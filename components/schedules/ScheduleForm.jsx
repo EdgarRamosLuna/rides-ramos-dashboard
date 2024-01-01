@@ -109,7 +109,7 @@ const ScheduleForm = ({ addSchedule, editSchedule, scheduleToEdit, idSchedule })
             )}
           />
         </LocalizationProvider>
-        <Button type="submit" variant="contained">
+        <Button variant="outlined" color="success" type='submit'>
           {scheduleToEdit ? 'Actualizar' : 'Guardar'}
         </Button>
       </Grid>
