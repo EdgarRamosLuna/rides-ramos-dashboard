@@ -1,0 +1,9 @@
+export default function handler(req, res) {
+  res.status(200).json({
+    NEXT_PUBLIC_MYSQL_DATABASE: process.env.NEXT_PUBLIC_MYSQL_DATABASE,
+    NEXT_PUBLIC_MYSQL_HOST: process.env.NEXT_PUBLIC_MYSQL_HOST,
+    NEXT_PUBLIC_MYSQL_PASSWORD: process.env.NEXT_PUBLIC_MYSQL_PASSWORD,
+    NEXT_PUBLIC_MYSQL_PORT: process.env.NEXT_PUBLIC_MYSQL_PORT,
+    NEXT_PUBLIC_MYSQL_USER: process.env.NEXT_PUBLIC_MYSQL_USER,
+  });
+}
